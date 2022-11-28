@@ -46,6 +46,8 @@ public class IndexController {
 
 	@FXML
 	private Button btnAnadir;
+	@FXML
+	private Button btnBorrar;
 
 	private ObservableList<Libro> listaLibros = FXCollections
 			.observableArrayList(new Libro("La Biblia", "Planeta", "Jes�s", 500));
@@ -68,9 +70,9 @@ public class IndexController {
 
 	@FXML
 	public void anadirLibro(ActionEvent event) {
-		if (!txtTitulo.getText().isEmpty() && !cbEditorial.getSelectionModel().isEmpty() && !txtAutor.getText().isEmpty()
-				&& !txtPaginas.getText().isEmpty()) {
-			
+		if (!txtTitulo.getText().isEmpty() && !cbEditorial.getSelectionModel().isEmpty()
+				&& !txtAutor.getText().isEmpty() && !txtPaginas.getText().isEmpty()) {
+
 			if (esNumero(txtPaginas.getText())) {
 				Libro l = new Libro(txtTitulo.getText(), cbEditorial.getValue().toString(), txtAutor.getText(),
 						Integer.parseInt(txtPaginas.getText()));
@@ -87,14 +89,30 @@ public class IndexController {
 				alerta.setContentText("Por favor introduzca un numero en las paginas");
 				alerta.showAndWait();
 			}
-		}else {
-			Alert alerta = new Alert(AlertType.ERROR);
-			alerta.setTitle("Error al insertar");
+		} else {
+			Alert alerta = new Alert(AlertType.WARNING);
+			alerta.setTitle("Informacion incompleta");
 			alerta.setHeaderText("Se debe introducion todos los campos");
 			alerta.setContentText("Por favor introduzca datos en todos los campos");
 			alerta.showAndWait();
 		}
 
+	}
+
+	public void borrarLibro(ActionEvent event) {
+
+		int indiceSeleccionado = tableLibros.getSelectionModel().getSelectedIndex();
+		if (indiceSeleccionado != -1) {
+
+			tableLibros.getItems().remove(indiceSeleccionado);
+		}else {
+			
+			Alert alerta = new Alert(AlertType.WARNING);
+			alerta.setTitle("No se puede borrar");
+			alerta.setHeaderText("Se debes elegir uno de los elementos de la tabla");
+			alerta.setContentText("Por favor selecciona alguno de los elementos de la tabla");
+			alerta.showAndWait();
+		}
 	}
 
 	public boolean esNumero(String s) {
