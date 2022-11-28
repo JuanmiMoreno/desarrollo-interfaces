@@ -2,6 +2,7 @@ package application;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
@@ -52,6 +53,12 @@ public class VideoJuegoController {
 		
 		tableJuego.setItems(listaVideojuegos);
 		
+		
+	}
+	@FXML
+	public void aniadirLibro(ActionEvent event) {
+		Videojuego juego1 = new Videojuego(txtNombre.getText(), Integer.parseInt(txtPrecio.getText()), opcionConsola.getValue().toString(), opcionPegi.getValue().toString());
+		listaVideojuegos.add(juego1);
 		
 	}
 }
