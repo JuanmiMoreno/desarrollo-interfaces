@@ -1,5 +1,10 @@
 package application;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JPanel;
 
 import javafx.collections.FXCollections;
@@ -65,7 +70,34 @@ public class IndexController {
 		columnAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
 		columnPaginas.setCellValueFactory(new PropertyValueFactory<>("paginas"));
 
-		tableLibros.setItems(listaLibros);
+		ObservableList ListaLibrosBd= getLibrosBD(); 
+		
+		tableLibros.setItems(ListaLibrosBd);
+	}
+	
+	//FUNCION PARA BUSCAR EN LA BASE DE DATOS
+	private ObservableList<Libro> getLibrosBD(){
+		
+		ObservableList<Libro> listaLibrosBd = FXCollections.observableArrayList();
+		try {
+		DatabaseConnection connectionDb = new DatabaseConnection();
+		Connection connection  =connectionDb.getConnection();
+		String query = "select * from libros";
+		PreparedStatement ps = connection.prepareStatement(query);
+		ResultSet rs = ps.executeQuery();
+		
+		while(rs.next()) {
+			Libro libro = new Libro(rs.getString("titulo"), rs.getString("editorial"), rs.getString("autor"), rs.getInt("paginas"));
+			listaLibrosBd.add(libro);
+		}
+		
+		connection.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return listaLibrosBd;
 	}
 
 	@FXML
@@ -105,6 +137,7 @@ public class IndexController {
 		if (indiceSeleccionado != -1) {
 
 			tableLibros.getItems().remove(indiceSeleccionado);
+			tableLibros.getSelectionModel().clearSelection();
 		}else {
 			
 			Alert alerta = new Alert(AlertType.WARNING);
