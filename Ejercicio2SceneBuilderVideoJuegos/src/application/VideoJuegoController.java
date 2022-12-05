@@ -97,6 +97,7 @@ public class VideoJuegoController {
 		if (indiceSeleccionado != -1) {
 
 			tableJuego.getItems().remove(indiceSeleccionado);
+			tableJuego.getSelectionModel().clearSelection();
 		}else {
 			
 			Alert alerta = new Alert(AlertType.WARNING);
