@@ -1,0 +1,51 @@
+
+.button{
+	
+	-fx-font-size : 12pt;
+	 -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-background-radius: 1;	
+	
+}
+
+#panelIzquierda{
+	-fx-background-color : lightgray;
+	
+}
+#btnAniadir{
+	-fx-background-color : lightgreen;	
+}
+#btnBorrar{
+	-fx-background-color : red;	
+}
+
+.table-view {
+    -fx-base: gray;
+    -fx-control-inner-background: lightgray;
+    -fx-background-color: white;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color: 
+        transparent
+        transparent
+        derive(-fx-base, 80%) 
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+.button:hover {
+    -fx-background-color: white;
+}
