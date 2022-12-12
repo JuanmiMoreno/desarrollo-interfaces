@@ -5,7 +5,8 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Libro {
 	
-	 private SimpleStringProperty titulo;
+		private int id;
+		private SimpleStringProperty titulo;
 	    private SimpleStringProperty editorial;
 	    private SimpleStringProperty autor;
 	    private SimpleIntegerProperty paginas;
@@ -17,8 +18,23 @@ public class Libro {
 	        this.autor = new SimpleStringProperty(autor);
 	        this.paginas = new SimpleIntegerProperty(paginas);
 	    }
+	   
+	    public Libro(int id, String titulo, String editorial, String autor, int paginas) {
 
-	    public String getTitulo() {
+	    	this.id = id;
+	        this.titulo = new SimpleStringProperty(titulo);
+	        this.editorial = new SimpleStringProperty(editorial);
+	        this.autor = new SimpleStringProperty(autor);
+	        this.paginas = new SimpleIntegerProperty(paginas);
+	    }
+
+	    
+	    
+	    public int getId() {
+			return id;
+		}
+
+		public String getTitulo() {
 	        return titulo.get();
 	    }
 

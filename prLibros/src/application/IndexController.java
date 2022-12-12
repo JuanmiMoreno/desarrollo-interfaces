@@ -55,10 +55,9 @@ public class IndexController {
 	private Button btnBorrar;
 
 	private ObservableList<Libro> listaLibros = FXCollections
-			.observableArrayList(new Libro("La Biblia", "Planeta", "Jes�s", 500));
+			.observableArrayList();
 
-	public ObservableList<String> listaEditoriales = FXCollections.observableArrayList("Planeta", "Altaya", "Kadokawa",
-			"Penguin Libros");
+	public ObservableList<String> listaEditoriales = FXCollections.observableArrayList("Planeta","Altaya","kadokawa");
 
 	@FXML
 	private void initialize() {
@@ -71,7 +70,6 @@ public class IndexController {
 		columnPaginas.setCellValueFactory(new PropertyValueFactory<>("paginas"));
 
 		ObservableList ListaLibrosBd= getLibrosBD(); 
-		
 		tableLibros.setItems(ListaLibrosBd);
 	}
 	
@@ -87,7 +85,7 @@ public class IndexController {
 		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
-			Libro libro = new Libro(rs.getString("titulo"), rs.getString("editorial"), rs.getString("autor"), rs.getInt("paginas"));
+			Libro libro = new Libro(rs.getInt("id"),rs.getString("titulo"), rs.getString("editorial"), rs.getString("autor"), rs.getInt("paginas"));
 			listaLibrosBd.add(libro);
 		}
 		
@@ -109,11 +107,39 @@ public class IndexController {
 				Libro l = new Libro(txtTitulo.getText(), cbEditorial.getValue().toString(), txtAutor.getText(),
 						Integer.parseInt(txtPaginas.getText()));
 
-				listaLibros.add(l);
+				//AÑADIR A LA TABLA
+				//listaLibros.add(l);
+				//tableLibros.setItems(listaLibrosBd );
+				
+				
 				txtTitulo.clear();
 				cbEditorial.getSelectionModel().clearSelection();
 				txtAutor.clear();
 				txtPaginas.clear();
+				
+				//AÑADIR A LA BASE DE DATOS
+				try {
+				DatabaseConnection connectionDb = new DatabaseConnection();
+				Connection connection  =connectionDb.getConnection();
+				
+				String query = "insert into libros (titulo, editorial, autor, paginas) VALUES (?,?,?,?)";
+				PreparedStatement ps  = connection.prepareStatement(query);
+				ps.setString(1, l.getTitulo() );
+				ps.setString(2, l.getEditorial());
+				ps.setString(3, l.getAutor());
+				ps.setInt(4, l.getPaginas());
+				ps.executeUpdate();
+				
+				connection.close();
+				
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//DEPSUES DE INSERTA ACTUALIZAMOS LA TABLA
+				ObservableList ListaLibrosBd= getLibrosBD(); 
+				tableLibros.setItems(ListaLibrosBd);
+				
 			} else {
 				Alert alerta = new Alert(AlertType.ERROR);
 				alerta.setTitle("Error al insertar");
@@ -136,8 +162,29 @@ public class IndexController {
 		int indiceSeleccionado = tableLibros.getSelectionModel().getSelectedIndex();
 		if (indiceSeleccionado != -1) {
 
-			tableLibros.getItems().remove(indiceSeleccionado);
-			tableLibros.getSelectionModel().clearSelection();
+			//tableLibros.getItems().remove(indiceSeleccionado);
+			
+			try {
+				DatabaseConnection connectionDb = new DatabaseConnection();
+				Connection connection  =connectionDb.getConnection();
+				
+				String query = "delete from libros where id =?";
+				PreparedStatement ps  = connection.prepareStatement(query);
+				Libro l =tableLibros.getSelectionModel().getSelectedItem();
+				ps.setInt(1, l.getId());
+				ps.executeUpdate();
+				tableLibros.getSelectionModel().clearSelection();
+				
+				ObservableList ListaLibrosBd= getLibrosBD(); 
+				tableLibros.setItems(ListaLibrosBd);
+				connection.close();
+				
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			
 		}else {
 			
 			Alert alerta = new Alert(AlertType.WARNING);
