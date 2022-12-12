@@ -83,7 +83,7 @@ public class IndexController {
 		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
-			Directivo directivo = new Directivo(rs.getString("nombre"), rs.getString("apellido"), rs.getString("dni"), rs.getString("correo") ,rs.getInt("empresa_id"));
+			Directivo directivo = new Directivo(rs.getInt("id"),rs.getString("nombre"), rs.getString("apellido"), rs.getString("dni"), rs.getString("correo") ,rs.getInt("empresa_id"));
 			ListaDirectivosBd.add(directivo);
 		}
 		
@@ -126,7 +126,7 @@ public class IndexController {
 				ps.setString(2, d.getApellido());
 				ps.setString(3, d.getDni());
 				ps.setString(4, d.getCorreo());
-				ps.setInt(5, d.getEmpresaId());
+				ps.setInt(5, d.getEmpresa_id());
 				ps.executeUpdate();
 				
 				connection.close();
@@ -151,9 +151,26 @@ public class IndexController {
 	int indiceSeleccionado = tableDirectivos.getSelectionModel().getSelectedIndex();
 		
 	if (indiceSeleccionado != -1) {
-
-			tableDirectivos.getItems().remove(indiceSeleccionado);
+		
+		try {
+			DatabaseConnection connectionDb = new DatabaseConnection();
+			Connection connection  =connectionDb.getConnection();
+			
+			String query = "delete from directivos where id =?";
+			PreparedStatement ps  = connection.prepareStatement(query);
+			Directivo d =tableDirectivos.getSelectionModel().getSelectedItem();
+			ps.setInt(1, d.getId());
+			ps.executeUpdate();
 			tableDirectivos.getSelectionModel().clearSelection();
+			
+			ObservableList ListaDirectivosBd= getDirectivosBD(); 
+			tableDirectivos.setItems(ListaDirectivosBd);
+			connection.close();
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else {
 			
 			Alert alerta = new Alert(AlertType.WARNING);

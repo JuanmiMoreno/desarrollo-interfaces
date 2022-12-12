@@ -5,12 +5,14 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Directivo {
 	
-	 private SimpleStringProperty nombre;
+		private int id;
+		private SimpleStringProperty nombre;
 	    private SimpleStringProperty apellido;
 	    private SimpleStringProperty dni;
 	    private SimpleStringProperty correo;
 	    private SimpleIntegerProperty empresa_id;
 
+	    
 	    public Directivo(String nombre, String apellido, String dni, String correo, int empresa_id) {
 
 	        this.nombre = new SimpleStringProperty(nombre);
@@ -19,8 +21,23 @@ public class Directivo {
 	        this.correo = new SimpleStringProperty(correo);
 	        this.empresa_id = new SimpleIntegerProperty(empresa_id);
 	    }
+	    
+	    
+	    public Directivo( int id,String nombre, String apellido, String dni, String correo, int empresa_id) {
+	    	this.id = id;
+	        this.nombre = new SimpleStringProperty(nombre);
+	        this.apellido = new SimpleStringProperty(apellido);
+	        this.dni = new SimpleStringProperty(dni);
+	        this.correo = new SimpleStringProperty(correo);
+	        this.empresa_id = new SimpleIntegerProperty(empresa_id);
+	    }
 
-	    public String getNombre() {
+	    
+	    public int getId() {
+			return id;
+		}
+
+		public String getNombre() {
 	        return nombre.get();
 	    }
 
@@ -52,11 +69,11 @@ public class Directivo {
 	        this.correo = new SimpleStringProperty(correo);
 	    }
 	    
-	    public int getEmpresaId() {
+	    public int getEmpresa_id() {
 	        return empresa_id.get();
 	    }
 
-	    public void setEmpresaId(int empresa_id) {
+	    public void setEmpresa_id(int empresa_id) {
 	        this.empresa_id = new SimpleIntegerProperty(empresa_id);
 	    }
 
