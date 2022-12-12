@@ -14,7 +14,7 @@ public class MainVideojuego extends Application {
 		try {
 			Pane root = (Pane)FXMLLoader.load(getClass().getResource("VideoJuego.fxml"));
 			Scene scene = new Scene(root,600,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("CSSvideojuego.css").toExternalForm());
 			primaryStage.setTitle("Videojuegos");
 			primaryStage.getIcons().add(new Image("/icono/iconoVideoJuego.png"));
 			primaryStage.setScene(scene);
