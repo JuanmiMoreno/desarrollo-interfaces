@@ -77,7 +77,7 @@ public class VideoJuegoController {
 		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
-			Videojuego videojuego = new Videojuego(rs.getString("nombre"), rs.getFloat("precio"), rs.getString("consola"), rs.getString("pegi"));
+			Videojuego videojuego = new Videojuego(rs.getInt("id"),rs.getString("nombre"), rs.getFloat("precio"), rs.getString("consola"), rs.getString("pegi"));
 			listaVideojuegosBd.add(videojuego);
 		}
 		
@@ -149,8 +149,24 @@ public class VideoJuegoController {
 		int indiceSeleccionado = tableJuego.getSelectionModel().getSelectedIndex();
 		if (indiceSeleccionado != -1) {
 
-			tableJuego.getItems().remove(indiceSeleccionado);
-			tableJuego.getSelectionModel().clearSelection();
+			try {
+				DatabaseConnection connectionDb = new DatabaseConnection();
+				Connection connection  =connectionDb.getConnection();
+				
+				String query = "delete from videojuegos where id =?";
+				PreparedStatement ps  = connection.prepareStatement(query);
+				Videojuego v =tableJuego.getSelectionModel().getSelectedItem();
+				ps.setInt(1, v.getId());
+				ps.executeUpdate();
+				tableJuego.getSelectionModel().clearSelection();
+				
+				ObservableList ListaVideojuegoBd= getVideojuegosBD(); 
+				tableJuego.setItems(ListaVideojuegoBd);
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else {
 			
 			Alert alerta = new Alert(AlertType.WARNING);
